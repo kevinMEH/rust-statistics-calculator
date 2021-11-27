@@ -19,7 +19,11 @@ fn main() {
         l6: Vec::new()
     };
     loop {
-        stat();
+        let result = stat(&mut memory);
+        match result.as_str() {
+            "exit" => break,
+            _ => (),
+        }
     }
     println!("Until next time!");
 }
