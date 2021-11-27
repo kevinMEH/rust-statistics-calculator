@@ -2,7 +2,7 @@
 
 Made by: Kevin from Brooklyn Technical High School
 
-This is a statistics calculator emulation of the TI 80s series calculators.
+This is a TI-80s series calculator emulation for my AP Statistics MP1 project.
 
 Also my first project with Rust!
 
