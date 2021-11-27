@@ -1,8 +1,23 @@
 use std::io;
-use rand::Rng;
-use std::cmp::Ordering;
+
+struct Memory {
+    l1: Vec<f32>,
+    l2: Vec<f32>,
+    l3: Vec<f32>,
+    l4: Vec<f32>,
+    l5: Vec<f32>,
+    l6: Vec<f32>
+}
 
 fn main() {
+    let mut memory = Memory {
+        l1: Vec::new(),
+        l2: Vec::new(),
+        l3: Vec::new(),
+        l4: Vec::new(),
+        l5: Vec::new(),
+        l6: Vec::new()
+    };
     loop {
         stat();
     }
