@@ -1,5 +1,10 @@
 use std::io;
+use std::fs;
+use std::io::Write;
+use serde::{Deserialize, Serialize};
+use serde_json;
 
+#[derive(Serialize, Deserialize, Debug)]
 struct Memory {
     l1: Vec<f32>,
     l2: Vec<f32>,
@@ -10,20 +15,53 @@ struct Memory {
 }
 
 fn main() {
-    let mut memory = Memory {
-        l1: Vec::new(),
-        l2: Vec::new(),
-        l3: Vec::new(),
-        l4: Vec::new(),
-        l5: Vec::new(),
-        l6: Vec::new()
+    let mut memory: Memory;
+    println!("Read saved memory?");
+    let mut response = String::new();
+    io::stdin().read_line(&mut response)
+        .expect("Error: Failed to read line. main() reading memory.");
+    memory = match response.to_lowercase().trim() {
+        "yes" => {
+            let data = fs::read_to_string("src/memory.json")
+                .expect("Error: Failed to read file.");
+            let result: Memory = serde_json::from_str(&data).unwrap();
+            result
+        },
+        _ => Memory {
+            l1: Vec::new(),
+            l2: Vec::new(),
+            l3: Vec::new(),
+            l4: Vec::new(),
+            l5: Vec::new(),
+            l6: Vec::new()
+        }
     };
+    
+    println!("{:#?}", memory);
     loop {
         let result = stat(&mut memory);
         match result.as_str() {
             "exit" => break,
             _ => (),
         }
+    }
+    println!("Save calculator memory? YES | NO");
+    let mut response = String::new();
+    io::stdin().read_line(&mut response)
+        .expect("Error: Failed to read line. main() saving memory.");
+    match response.to_lowercase().trim() {
+        "yes" => {
+            let json = serde_json::json!(memory).to_string();
+            let file = fs::OpenOptions::new().write(true).truncate(true)
+                .open("src/memory.json");
+            let mut file = match file {
+                Ok(file) => file,
+                Err(error) => panic!("Error: Failed to open file.")
+            };
+            file.write_all(&json.as_bytes());
+            println!("Memory saved!");
+        },
+        _ => println!("Omitting save...")
     }
     println!("Until next time!");
 }
