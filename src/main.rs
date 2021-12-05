@@ -81,19 +81,8 @@ fn stat(memory: &mut Memory) -> String {
 }
 
 fn edit(memory: &mut Memory) {
-    let mut command = String::new();
-    println!("EDIT: L1 L2 L3 L4 L5 L6");
-    io::stdin().read_line(&mut command)
-        .expect("Error: Failed to read line. edit()");
-    match command.to_lowercase().trim() {
-        "l1" => edit_list(&mut memory.l1),
-        "l2" => edit_list(&mut memory.l2),
-        "l3" => edit_list(&mut memory.l3),
-        "l4" => edit_list(&mut memory.l4),
-        "l5" => edit_list(&mut memory.l5),
-        "l6" => edit_list(&mut memory.l6),
-        _ => println!("Invalid response.")
-    }
+    println!("EDIT LIST:");
+    edit_list(ask_list(memory));
 }
 
 fn edit_list(list: &mut Vec<f32>) {
@@ -137,5 +126,47 @@ fn edit_list(list: &mut Vec<f32>) {
 }
 
 fn calc(memory: &Memory) {
-    
+fn ask_list(memory: &mut Memory) -> &mut Vec<f32> {
+    loop {
+        let mut command = String::new();
+        println!("L1 L2 L3 L4 L5 L6");
+        io::stdin().read_line(&mut command)
+            .expect("Error: Failed to read line. ask_list()");
+        let list = match command.to_lowercase().trim() {
+            "l1" => &mut memory.l1,
+            "l2" => &mut memory.l2,
+            "l3" => &mut memory.l3,
+            "l4" => &mut memory.l4,
+            "l5" => &mut memory.l5,
+            "l6" => &mut memory.l6,
+            _ => {
+                println!("Invalid response. Try again.");
+                continue;
+            }
+        };
+        return list;
+    }
+}
+
+// Implementation that does not return a mutable list
+fn ask_list_ref(memory: &Memory) -> &Vec<f32> {
+    loop {
+        let mut command = String::new();
+        println!("L1 L2 L3 L4 L5 L6");
+        io::stdin().read_line(&mut command)
+            .expect("Error: Failed to read line. _ref()");
+        let list = match command.to_lowercase().trim() {
+            "l1" => &memory.l1,
+            "l2" => &memory.l2,
+            "l3" => &memory.l3,
+            "l4" => &memory.l4,
+            "l5" => &memory.l5,
+            "l6" => &memory.l6,
+            _ => {
+                println!("Invalid response. Try again.");
+                continue;
+            }
+        };
+        return list;
+    }
 }
