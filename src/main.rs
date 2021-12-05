@@ -165,6 +165,98 @@ fn calc(memory: &Memory) {
         _ => println!("Invalid response.")
     }
 }
+
+
+// 0, 1, 2, 3, 4, 5, 6         7
+// 0, 1, 2, 3, 4, 5, 6, 7      8
+fn one_v_stats(memory: &Memory) {
+    println!("Select list:");
+    
+    let mut list: Vec<f32> = ask_list_ref(&memory).clone();
+    quickersort::sort_floats(&mut list[..]);
+    if list.len() == 0 {
+        println!("Empty list.");
+        return;
+    }
+    let mean: f32;
+    let mut sum: f32 = 0.0;
+    let mut squared_sum: f32 = 0.0;
+    let sample_std: f32;
+    let population_std: f32;
+    let n = list.len();
+    let min = list[0];
+    
+    if list.len() < 4 {
+        println!("List length is less than 4, quartile calculation skipped.");
+    }
+    
+    let q1: f32 = {
+        // Honest cannot think of a better way so whatever
+        if list.len() < 4 {
+            0.0
+        } else {
+            
+            let list = &list[.. list.len() / 2 - 1]; // Lower list
+            // If you're wondering why I'm comparing to 0 and then matching instead of just matching 0 and 1
+            // Rust doesn't recognize that % 2 will only return 2 possible values: 0 and 1, and it wants you
+            // to include a default clause even though it's not needed. Going to make it a boolean to avoid
+            // adding a default clause.
+            match list.len() % 2 == 0 {
+                true => (list[list.len() / 2 - 1] + list[list.len() / 2]) / 2.0,
+                false => list[list.len() / 2]
+            }
+            
+        }
+    };
+    let median: f32 = match list.len() % 2 == 0 {
+        true => (list[list.len() / 2 - 1] + list[list.len() / 2]) / 2.0,
+        false => list[list.len() / 2]
+    };
+    let q3: f32 = {
+        if list.len() < 4 {
+            0.0
+        } else {
+        
+            let list = &list[(list.len() + 1) / 2 ..]; // Upper list
+            match list.len() % 2 == 0 {
+                true => (list[list.len() / 2 - 1] + list[list.len() / 2]) / 2.0,
+                false => list[list.len() / 2]
+            }
+             
+        }
+    };
+    let max = list[list.len() - 1];
+    
+    for num in list.iter() {
+        sum = sum + num;
+        squared_sum = squared_sum + num * num;
+    }
+    mean = sum / n as i32 as f32;
+    
+    let mut summation: f32 = 0.0;
+    for num in list.iter() {
+        summation = summation + (num - mean) * (num - mean);
+    }
+    sample_std = (summation / ((n - 1) as i32 as f32)).sqrt();
+    population_std = (summation / (n as i32 as f32)).sqrt();
+    
+    println!("Mean: {}", mean);
+    println!("Sum: {}", sum);
+    println!("Sum^2: {}", squared_sum);
+    println!("Sample Standard Deviation: {}", sample_std);
+    println!("Population Standard Deviation: {}", population_std);
+    println!("Size: {}", n);
+    println!("Min: {}", min);
+    if list.len() > 4 {
+        println!("Q1: {}", q1);
+    }
+    println!("Median: {}", median);
+    if list.len() > 4 {
+        println!("Q3: {}", q3);
+    }
+    println!("Max: {}", max);
+}
+
 fn ask_list(memory: &mut Memory) -> &mut Vec<f32> {
     loop {
         let mut command = String::new();
