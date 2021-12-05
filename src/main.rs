@@ -198,7 +198,7 @@ fn one_v_stats(memory: &Memory) {
             0.0
         } else {
             
-            let list = &list[.. list.len() / 2 - 1]; // Lower list
+            let list = &list[.. list.len() / 2]; // Lower list
             // If you're wondering why I'm comparing to 0 and then matching instead of just matching 0 and 1
             // Rust doesn't recognize that % 2 will only return 2 possible values: 0 and 1, and it wants you
             // to include a default clause even though it's not needed. Going to make it a boolean to avoid
