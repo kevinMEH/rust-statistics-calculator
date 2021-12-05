@@ -15,6 +15,7 @@ struct Memory {
 }
 
 fn main() {
+    // Initialize memory
     let mut memory: Memory;
     println!("Read saved memory?");
     let mut response = String::new();
@@ -36,8 +37,11 @@ fn main() {
             l6: Vec::new()
         }
     };
-    
     println!("{:#?}", memory);
+    
+    
+
+    // Calculator Loop
     loop {
         let result = stat(&mut memory);
         match result.as_str() {
@@ -45,6 +49,10 @@ fn main() {
             _ => (),
         }
     }
+    
+    
+
+    // Saving memory
     println!("Save calculator memory? YES | NO");
     let mut response = String::new();
     io::stdin().read_line(&mut response)
@@ -56,13 +64,14 @@ fn main() {
                 .open("src/memory.json");
             let mut file = match file {
                 Ok(file) => file,
-                Err(error) => panic!("Error: Failed to open file.")
+                Err(error) => panic!("Error: Failed to open file. {}", error)
             };
             file.write_all(&json.as_bytes());
             println!("Memory saved!");
         },
         _ => println!("Omitting save...")
     }
+    
     println!("Until next time!");
 }
 
