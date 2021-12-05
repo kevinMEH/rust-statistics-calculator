@@ -258,6 +258,12 @@ fn one_v_stats(memory: &Memory) {
 }
 
 
+// 
+fn two_v_stats(memory: &Memory) {
+    
+}
+
+
 fn linreg(memory: &Memory) {
     println!("Select list 1:");
     let list1: &Vec<f32> = ask_list_ref(&memory);
