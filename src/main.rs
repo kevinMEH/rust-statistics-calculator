@@ -154,6 +154,17 @@ fn edit_list(list: &mut Vec<f32>) {
 }
 
 fn calc(memory: &Memory) {
+    println!("1VSTATS | 2VSTATS | LINREG");
+    let mut response = String::new();
+    io::stdin().read_line(&mut response)
+        .expect("Error: Failed to read line. calc()");
+    match response.to_lowercase().trim() {
+        "1vstats" => one_v_stats(memory),
+        "2vstats" => two_v_stats(memory),
+        "linreg" => linreg(memory),
+        _ => println!("Invalid response.")
+    }
+}
 fn ask_list(memory: &mut Memory) -> &mut Vec<f32> {
     loop {
         let mut command = String::new();
