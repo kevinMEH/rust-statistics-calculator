@@ -10,3 +10,4 @@ authors = ["kevinMEH kevin@liao.gg"]
 rand = "0.8.4"
 serde_json = "1.0"
 serde = { version = "1.0.130", features = ["derive"] }
+quickersort = "3.0.1"

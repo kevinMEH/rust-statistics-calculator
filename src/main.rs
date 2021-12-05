@@ -4,6 +4,8 @@ use std::io::Write;
 use serde::{Deserialize, Serialize};
 use serde_json;
 
+extern crate quickersort;
+
 #[derive(Serialize, Deserialize, Debug)]
 struct Memory {
     l1: Vec<f32>,
