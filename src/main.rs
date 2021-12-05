@@ -86,34 +86,52 @@ fn edit(memory: &mut Memory) {
 }
 
 fn edit_list(list: &mut Vec<f32>) {
+    let list: &mut Vec<f32> = list;
+    
     println!("Input all elements of the list.");
     let mut input = String::new();
     io::stdin().read_line(&mut input)
         .expect("Error: Failed to read line. edit_list()");
-    let mut seperator;
+    
     println!("What is the delimiter for the list? SPACE | COMMA | COMMA SPACE | NEW LINE | CUSTOM");
     let mut response = String::new();
     io::stdin().read_line(&mut response)
         .expect("Error: Failed to read line. edit_list() delimiter.");
-    match response.to_lowercase().trim() {
-        "space" => seperator = String::from(" "),
-        "comma" => seperator = String::from(","),
-        "comma space" => seperator = String::from(", "),
-        "new line" => seperator = String::from("\n"),
+        
+    let seperator = match response.to_lowercase().trim() {
+        "space" => String::from(" "),
+        "comma" => String::from(","),
+        "comma space" => String::from(", "),
+        "new line" => String::from("\n"),
         "custom" => {
-            seperator = String::new();
+            let mut temp = String::new();
             println!("Enter delimiter: ");
-            io::stdin().read_line(&mut seperator)
+            io::stdin().read_line(&mut temp)
                 .expect("Error: Failed to read line. edit_list() custom delimiter.");
-            seperator = seperator.trim().to_string();
+            
+            temp.trim().to_string()
         },
         _ => {
             println!("Invalid response.");
             return;
         }
-    }
+    };
     
     let string_vec: Vec<&str> = input.trim().split(&seperator).collect();
+    
+    println!("APPEND or REPLACE?");
+    let mut response = String::new();
+    io::stdin().read_line(&mut response)
+        .expect("Error: Failed to read line. APPEND or REPLACE.");
+    match response.to_string().trim() {
+        "append" => (),
+        "replace" => list.clear(),
+        _ => {
+            println!("Invalid response.");
+            return;
+        }
+    };
+
     for string in string_vec {
         match string.parse() {
             Ok(num) => list.push(num),
@@ -122,6 +140,7 @@ fn edit_list(list: &mut Vec<f32>) {
             }
         };
     }
+
     println!("{:?}", &list);
 }
 
