@@ -257,6 +257,50 @@ fn one_v_stats(memory: &Memory) {
     println!("Max: {}", max);
 }
 
+
+fn linreg(memory: &Memory) {
+    println!("Select list 1:");
+    let list1: &Vec<f32> = ask_list_ref(&memory);
+    println!("Select list 2:");
+    let list2: &Vec<f32> = ask_list_ref(&memory);
+    
+    if list1.len() != list2.len() {
+        println!("The lists are not the same size.");
+        return;
+    }
+    
+    let n = list1.len() as i32 as f32;
+    let mut sum_x: f32 = 0.0;
+    let mut sum_y: f32 = 0.0;
+    let mut sum_xy: f32 = 0.0;
+    let mut sum_xx: f32 = 0.0; // Bad naming, might change later
+    let mut sum_yy: f32 = 0.0;
+    
+    for (index, x) in list1.iter().enumerate() {
+        let y = list2[index];
+        sum_x = sum_x + x;
+        sum_xx = sum_xx + x * x;
+        sum_y = sum_y + y;
+        sum_yy = sum_yy + y * y;
+        sum_xy = sum_xy + x * y;
+    }
+    
+    // m = ( n(sum(xy)) - sum(x)sum(y) ) / ( n(sum(x^2)) - sum(x)^2 )
+    let slope = ( n * sum_xy - sum_x * sum_y) / ( n * sum_xx - sum_x * sum_x);
+    
+    // b = ( sum(y) - m(sum(x)) ) / n
+    let intercept = ( sum_y - slope * sum_x ) / n;
+    
+    // r = ( n(sum(xy)) - sum(x)sum(y) ) / sqrt( ( n(sum(x^2)) - sum(x)^2 ) ( (n(sum(y^2)) - sum(y)^2 ) ) )
+    let r: f32 = ( n * sum_xy - sum_x * sum_y) / ( ( n * sum_xx - sum_x * sum_x) * ( n * sum_yy - sum_y * sum_y) ).sqrt();
+    
+    let rr = r * r; // Terrible naming, but no ideas at the moment
+    
+    println!("y = {}x + {}", slope, intercept);
+    println!("r = {}", r);
+    println!("r^2 = {}", rr);
+}
+
 fn ask_list(memory: &mut Memory) -> &mut Vec<f32> {
     loop {
         let mut command = String::new();
